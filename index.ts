@@ -1,8 +1,8 @@
 import express, { Express, Request, Response, Application } from 'express';
 
-import { connectDB } from '@config/index';
 import dotenv from 'dotenv';
-import { userRotes, authenticationRotes } from '@routes/index';
+import { userRotes, authenticationRotes } from '@/routes';
+import { connectDB } from '@/config';
 
 const api_base_url = '/api';
 
