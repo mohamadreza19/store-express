@@ -36,24 +36,46 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var UserConteoller = /** @class */ (function () {
-    function UserConteoller(userService) {
+var global_1 = require("@/global");
+var MONGODB_OBJECT_ID_LENGTH = 24;
+var FileConteoller = /** @class */ (function () {
+    function FileConteoller(service) {
         var _this = this;
-        this.getUsers = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var records;
+        this.getFileById = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var _id, record, filePath, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userService.find({}, 1, 10)];
+                    case 0:
+                        _id = req.params.id;
+                        if (_id.length !== MONGODB_OBJECT_ID_LENGTH) {
+                            return [2 /*return*/, res.status(400).json({
+                                    message: '_id must be a 24 character hex string',
+                                })];
+                        }
+                        _a.label = 1;
                     case 1:
-                        records = _a.sent();
-                        console.log(records);
-                        res.status(200).json(records);
-                        return [2 /*return*/];
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.service.findById(_id)];
+                    case 2:
+                        record = _a.sent();
+                        if (!record) {
+                            return [2 /*return*/, res.status(404).json({
+                                    message: "The file with id:".concat(_id, " was not found"),
+                                })];
+                        }
+                        filePath = "".concat(global_1.StaticPath.public, "/").concat(record.name);
+                        res.status(200).sendFile(filePath);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_1 = _a.sent();
+                        console.log(error_1);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); };
-        this.userService = userService;
+        this.service = service;
     }
-    return UserConteoller;
+    return FileConteoller;
 }());
-exports.default = UserConteoller;
+exports.default = FileConteoller;

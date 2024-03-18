@@ -1,5 +1,12 @@
+// Add module alias
+import 'module-alias/register';
+import moduleAlias from 'module-alias';
+
+moduleAlias.addAliases({
+  '@': __dirname,
+});
+
 import express, { Express, Request, Response, Application } from 'express';
-import path from 'path';
 
 import dotenv from 'dotenv';
 import { fileRoutes, productRotes, userRotes } from '@/routes';

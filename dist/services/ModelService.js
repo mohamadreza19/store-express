@@ -36,24 +36,71 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var UserConteoller = /** @class */ (function () {
-    function UserConteoller(userService) {
-        var _this = this;
-        this.getUsers = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var records;
+var UserService = /** @class */ (function () {
+    function UserService(User) {
+        this.userModel = User;
+    }
+    UserService.prototype.find = function (criteria, page, limit) {
+        return __awaiter(this, void 0, void 0, function () {
+            var total, data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userService.find({}, 1, 10)];
+                    case 0: return [4 /*yield*/, this.userModel.countDocuments(criteria)];
                     case 1:
-                        records = _a.sent();
-                        console.log(records);
-                        res.status(200).json(records);
-                        return [2 /*return*/];
+                        total = _a.sent();
+                        return [4 /*yield*/, this.userModel.find(criteria).skip(page).limit(limit)];
+                    case 2:
+                        data = _a.sent();
+                        return [2 /*return*/, {
+                                total: total,
+                                data: data,
+                            }];
                 }
             });
-        }); };
-        this.userService = userService;
-    }
-    return UserConteoller;
+        });
+    };
+    UserService.prototype.create = function (data) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, Promise.reject('need implant')];
+            });
+        });
+    };
+    UserService.prototype.findOne = function (criteria) {
+        return __awaiter(this, void 0, void 0, function () {
+            var data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userModel.findOne(criteria)];
+                    case 1:
+                        data = _a.sent();
+                        return [2 /*return*/, data];
+                }
+            });
+        });
+    };
+    UserService.prototype.update = function (id, data) {
+        return Promise.reject('need implant');
+    };
+    UserService.prototype.findById = function (_id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userModel.findById(_id)];
+                    case 1:
+                        data = _a.sent();
+                        return [2 /*return*/, data];
+                }
+            });
+        });
+    };
+    UserService.prototype.delete = function (id) {
+        return Promise.reject('need implant');
+    };
+    UserService.prototype.aggregate = function (pipeline) {
+        return Promise.reject('need implant');
+    };
+    return UserService;
 }());
-exports.default = UserConteoller;
+exports.default = UserService;

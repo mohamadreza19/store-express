@@ -41,13 +41,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var bcrypt_1 = __importDefault(require("bcrypt"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var generateAccessToken_1 = __importDefault(require("@/helper/string/generateAccessToken"));
-var generateRefreshToken_1 = __importDefault(require("@/helper/string/generateRefreshToken"));
 var AuthenticationController = /** @class */ (function () {
     function AuthenticationController(userService) {
         var _this = this;
         this.login = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var _a, password, username, user, isPasswordMatch, accessToken, refreshToken, error_1;
+            var _a, password, username, users, user, isPasswordMatch, error_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -61,9 +59,10 @@ var AuthenticationController = /** @class */ (function () {
                         _b.label = 1;
                     case 1:
                         _b.trys.push([1, 4, , 5]);
-                        return [4 /*yield*/, this.userService.getUser({ username: username })];
+                        return [4 /*yield*/, this.userService.find({ username: username }, 0, 10)];
                     case 2:
-                        user = _b.sent();
+                        users = _b.sent();
+                        user = users.data[0];
                         if (!user) {
                             return [2 /*return*/, res.status(401).json({
                                     message: 'Invalid username or password',
@@ -82,10 +81,6 @@ var AuthenticationController = /** @class */ (function () {
                                     message: 'Invalid username or password',
                                 })];
                         }
-                        accessToken = (0, generateAccessToken_1.default)(user);
-                        refreshToken = (0, generateRefreshToken_1.default)(user);
-                        // console.log('passwordMatch' + passwordMatch);
-                        res.json({ accessToken: accessToken, refreshToken: refreshToken });
                         return [3 /*break*/, 5];
                     case 4:
                         error_1 = _b.sent();
@@ -96,14 +91,14 @@ var AuthenticationController = /** @class */ (function () {
             });
         }); };
         this.register = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var _a, password, username, email, passwordCheck, hashedPassword, user, error_2;
+            var _a, password, username, email, passwordCheck, hashedPassword, error_2;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _a = req.body, password = _a.password, username = _a.username, email = _a.email, passwordCheck = _a.passwordCheck;
                         _b.label = 1;
                     case 1:
-                        _b.trys.push([1, 4, , 5]);
+                        _b.trys.push([1, 3, , 4]);
                         if (!username) {
                             return [2 /*return*/, res.status(400).json('username is required')];
                         }
@@ -122,20 +117,12 @@ var AuthenticationController = /** @class */ (function () {
                         return [4 /*yield*/, bcrypt_1.default.hash(password, 10)];
                     case 2:
                         hashedPassword = _b.sent();
-                        return [4 /*yield*/, this.userService.createUser({
-                                username: username,
-                                password: hashedPassword,
-                                email: email,
-                            })];
+                        return [3 /*break*/, 4];
                     case 3:
-                        user = _b.sent();
-                        res.status(201).json(user);
-                        return [3 /*break*/, 5];
-                    case 4:
                         error_2 = _b.sent();
                         console.log('Internal Error' + error_2);
-                        return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); };
@@ -155,8 +142,8 @@ var AuthenticationController = /** @class */ (function () {
                         if (err) {
                             return res.sendStatus(403);
                         }
-                        var accessToken = (0, generateAccessToken_1.default)(decoded);
-                        res.json({ accessToken: accessToken });
+                        // const accessToken = generateAccessToken(decoded as IUser);
+                        // res.json({ accessToken });
                     });
                 }
                 return [2 /*return*/];

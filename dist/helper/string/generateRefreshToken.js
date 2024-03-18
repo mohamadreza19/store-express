@@ -1,13 +1,9 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-function generateRefreshToken(user) {
-    var secretKey = process.env.REFRESH_KEY;
-    if (secretKey) {
-        return jsonwebtoken_1.default.sign({ userId: user._id }, secretKey);
-    }
+function generateRefreshToken() {
+    // const secretKey = process.env.REFRESH_KEY;
+    // if (secretKey) {
+    //   return jwt.sign({ userId: user._id }, secretKey);
+    // }
 }
 exports.default = generateRefreshToken;

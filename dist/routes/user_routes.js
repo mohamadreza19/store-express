@@ -8,7 +8,7 @@ var models_1 = require("@/models");
 var services_1 = require("@/services");
 var express_1 = __importDefault(require("express"));
 var router = express_1.default.Router();
-var userService = new services_1.UserService(models_1.UserModel);
+var userService = new services_1.ModelService(models_1.UserModel);
 var userConteoller = new controllers_1.UserConteoller(userService);
 router.get('/users', userConteoller.getUsers);
 exports.default = router;
