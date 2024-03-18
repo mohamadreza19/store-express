@@ -1,21 +1,16 @@
 import { Request, Response } from 'express';
 
-import type { UserRequestI } from '@/types/UserConteroller';
-
-import { UserServiceI } from '@/types/UserService';
+import { ModelService } from '@/types/Services';
 
 class UserConteoller {
-  private userService: UserServiceI;
+  private userService: ModelService;
 
-  constructor(userService: UserServiceI) {
+  constructor(userService: ModelService) {
     this.userService = userService;
   }
 
-  getUsers = async (req: UserRequestI, res: Response) => {
-    const records = await this.userService.getUsers({
-      limit: 10,
-      page: 1,
-    });
+  getUsers = async (req: Request, res: Response) => {
+    const records = await this.userService.find({}, 1, 10);
     console.log(records);
     res.status(200).json(records);
   };

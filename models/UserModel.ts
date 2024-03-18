@@ -1,4 +1,4 @@
-import { IUser } from '@/types/UserService';
+import { IUser } from '@/types/Services';
 import mongoose, { Model, Schema, InferSchemaType } from 'mongoose';
 
 const userSchema = new Schema<IUser>({

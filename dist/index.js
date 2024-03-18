@@ -1,23 +1,12 @@
-'use strict';
-require('module-alias/register');
-
-const moduleAlias = require('module-alias');
-
-moduleAlias.addAliases({
-  '@': __dirname,
-});
-
-// console.log(__dirname + 'MEO');
-var __importDefault =
-  (this && this.__importDefault) ||
-  function (mod) {
-    return mod && mod.__esModule ? mod : { default: mod };
-  };
-Object.defineProperty(exports, '__esModule', { value: true });
-var express_1 = __importDefault(require('express'));
-var dotenv_1 = __importDefault(require('dotenv'));
-var routes_1 = require('@/routes');
-var config_1 = require('@/config');
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = __importDefault(require("express"));
+var dotenv_1 = __importDefault(require("dotenv"));
+var routes_1 = require("@/routes");
+var config_1 = require("@/config");
 var api_base_url = '/api';
 // routes
 dotenv_1.default.config();
@@ -29,5 +18,5 @@ app.use(express_1.default.json());
 app.use(api_base_url, routes_1.userRotes);
 app.use(api_base_url, routes_1.authenticationRotes);
 app.listen(port, function () {
-  console.log('Server is fire at http://localhost:' + port);
+    console.log('Server is fire at http://localhost:' + port);
 });

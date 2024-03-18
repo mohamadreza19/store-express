@@ -1,10 +1,10 @@
 import { AuthenticationController, UserConteoller } from '@/controllers';
 import { UserModel } from '@/models';
-import { UserService } from '@/services';
+import { ModelService } from '@/services';
 import express from 'express';
 const router = express.Router();
 
-const userService = new UserService(UserModel);
+const userService = new ModelService(UserModel);
 
 const authConteoller = new AuthenticationController(userService);
 

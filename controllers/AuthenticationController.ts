@@ -8,14 +8,14 @@ import type {
   UserRequestI,
 } from '@/types/AuthenticationController';
 
-import { IUser, UserServiceI } from '@/types/UserService';
 import generateAccessToken from '@/helper/string/generateAccessToken';
 import generateRefreshToken from '@/helper/string/generateRefreshToken';
+import { ModelService } from '@/types/Services';
 
 class AuthenticationController {
-  private userService: UserServiceI;
+  private userService: ModelService;
 
-  constructor(userService: UserServiceI) {
+  constructor(userService: ModelService) {
     this.userService = userService;
   }
 
@@ -30,8 +30,8 @@ class AuthenticationController {
     }
 
     try {
-      const user = await this.userService.getUser({ username });
-
+      const users = await this.userService.find({ username }, 0, 10);
+      const user = users.data[0];
       if (!user) {
         return res.status(401).json({
           message: 'Invalid username or password',
@@ -51,10 +51,10 @@ class AuthenticationController {
           message: 'Invalid username or password',
         });
       }
-      const accessToken = generateAccessToken(user);
-      const refreshToken = generateRefreshToken(user);
+      // const accessToken = generateAccessToken(user);
+      // const refreshToken = generateRefreshToken(user);
       // console.log('passwordMatch' + passwordMatch);
-      res.json({ accessToken, refreshToken });
+      // res.json({ accessToken, refreshToken });
     } catch (error) {
       console.log('Internal Error AuthenticationController 43:' + error);
     }
@@ -82,13 +82,13 @@ class AuthenticationController {
       }
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      const user = await this.userService.createUser({
-        username,
-        password: hashedPassword,
-        email,
-      });
+      // const user = await this.userService.createUser({
+      //   username,
+      //   password: hashedPassword,
+      //   email,
+      // });
 
-      res.status(201).json(user);
+      // res.status(201).json(user);
     } catch (error) {
       console.log('Internal Error' + error);
     }
@@ -110,9 +110,9 @@ class AuthenticationController {
           return res.sendStatus(403);
         }
 
-        const accessToken = generateAccessToken(decoded as IUser);
+        // const accessToken = generateAccessToken(decoded as IUser);
 
-        res.json({ accessToken });
+        // res.json({ accessToken });
       });
     }
   };
