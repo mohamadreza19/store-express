@@ -1,0 +1,42 @@
+openapi: 3.0.0
+info:
+  title: Example API
+  version: 1.0.0
+servers:
+  - url: http://193.43.146.241:3000/api
+paths:
+  /users:
+    # Contents of routes/users.yaml
+    get:
+      summary: Get all users
+      description: Retrieve a list of all users
+      responses:
+        '200':
+          description: A list of users
+  /products:
+    # Contents of routes/products.yaml
+    get:
+      summary: Get all products
+      description: Retrieve a list of all products
+      responses:
+        '200':
+          description: A list of products
+components:
+  # Contents of components/schemas.yaml
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+  # Contents of components/security.yaml
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

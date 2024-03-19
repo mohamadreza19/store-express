@@ -1,43 +1,67 @@
 // Add module alias
 import 'module-alias/register';
 import moduleAlias from 'module-alias';
+import fs from 'fs';
 
 moduleAlias.addAliases({
   '@': __dirname,
 });
 
-import express, { Express, Request, Response, Application } from 'express';
+import express, { Application } from 'express';
 
 import dotenv from 'dotenv';
-import { fileRoutes, productRotes, userRotes } from '@/routes';
+import cors from 'cors';
+import swaggerUi, { JsonObject } from 'swagger-ui-express';
+import path from 'path';
+import Routes from '@/routes';
 import { connectDB } from '@/config';
 import { StaticPath } from '@/global';
 
-const api_base_url = '/api';
+class App {
+  public app: Application = express();
+  public routes = new Routes();
+  public api_base_url: string = '/api';
+  public port = process.env.PORT;
+  private swaggerFile: string = path.join(
+    __dirname,
+    'config',
+    'swagger',
+    'index.json'
+  );
+  private swaggerData: string = fs.readFileSync(this.swaggerFile, 'utf-8');
+  private swaggerJSON: JsonObject = JSON.parse(this.swaggerData);
 
-// routes
+  constructor() {
+    this.app = express();
+    dotenv.config();
+    StaticPath.setRootDir(__dirname);
 
-dotenv.config();
+    if (StaticPath.public) {
+      this.app.use(
+        this.api_base_url + '/public',
+        express.static(StaticPath.public)
+      );
+    }
+    //  DB CONECTION
+    connectDB();
+    //
+    this.app.use(express.json());
+    // Cors
+    this.app.use(cors());
 
-const app: Application = express();
+    this.routes.routes(this.app);
 
-StaticPath.setRootDir(__dirname);
-
-if (StaticPath.public) {
-  app.use(api_base_url + '/public', express.static(StaticPath.public));
+    this.app.use(
+      '/api-docs',
+      swaggerUi.serve,
+      swaggerUi.setup(this.swaggerJSON)
+    );
+    const port = process.env.PORT;
+    if (port) {
+      this.app.listen(port, () => {
+        console.log('Server is fire at http://localhost:' + port);
+      });
+    }
+  }
 }
-
-//  DB CONECTION
-connectDB();
-
-const port = process.env.PORT;
-
-app.use(express.json());
-app.use(api_base_url, userRotes);
-app.use(api_base_url, productRotes);
-app.use(api_base_url, fileRoutes);
-// app.use(api_base_url, authenticationRotes);
-
-app.listen(port, () => {
-  console.log('Server is fire at http://localhost:' + port);
-});
+export default new App().app;
