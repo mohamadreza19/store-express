@@ -9,7 +9,8 @@
     "dev": "nodemon index.ts",
     "build": "tsc",
     "script1": "node ./scripts/add_path_alias_to_dist.js",
-    "doc:generate": "swagger-cli bundle config/swagger/index.yaml --outfile config/swagger/index.json"
+    "doc:generate": "swagger-cli bundle config/swagger/index.yaml --outfile config/swagger/index.json",
+    "copy:sgg-file": "node scripts/copy_swagger_dir_to_dist.js"
   },
   "keywords": [],
   "author": "",

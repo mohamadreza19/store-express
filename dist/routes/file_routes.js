@@ -7,7 +7,6 @@ var controllers_1 = require("@/controllers");
 var models_1 = require("@/models");
 var services_1 = require("@/services");
 var express_1 = __importDefault(require("express"));
-controllers_1.FileContoller;
 var router = express_1.default.Router();
 var service = new services_1.ModelService(models_1.FileModel);
 var conteoller = new controllers_1.FileContoller(service);
